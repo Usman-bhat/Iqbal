@@ -1,0 +1,11 @@
+/* global.css */
+@font-face {
+  font-family: 'JameelFont';
+  src: url('./jameel.ttf') format('truetype');
+  /* Add additional formats if needed */
+  font-weight: normal;
+  font-style: normal;
+}                                                                                                         
+.jameel-font {                                                                                              font-family: 'JameelFont', sans-serif;
+}                                                                                                         
+/* Other global styles can go here */
