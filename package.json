@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-tailwind-resume-page",
+  "name": "Iqbal poetry Website",
   "version": "1.0.0",
   "private": true,
   "license": "https://usman-bhat.github.io/home",
@@ -19,7 +19,7 @@
     "knex": "^3.1.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.5",
-    "next": "^13.5.6",
+    "next": "^13.5.3",
     "oracledb": "^6.3.0",
     "pg": "^8.11.3",
     "pg-query-stream": "^4.5.3",
