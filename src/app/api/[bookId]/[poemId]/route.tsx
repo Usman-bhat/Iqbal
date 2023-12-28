@@ -10,7 +10,7 @@ interface PoemID {
 export async function GET(request: NextRequest, { params }: { params: PoemID }) {
   if (!db) {
     db = await open({
-      filename: "data.db",
+      filename: "../../data.db",
       driver: sqlite3.Database,
     });
   }
