@@ -1,25 +1,24 @@
-import {sqlite3} from "sqlite";
+import {sqlite3} from "sqlite3";
 import { open } from "sqlite";
-import path from 'path';
 
 let db = null;
 
 interface PoemID {
-  poemId: string;
+    poemId: string;
 }
 
 export async function GET(request: NextRequest, { params }: { params: PoemID }) {
-  if (!db) {
-    db = await open({
-      filename: path.resolve(__dirname, 'data.db'),
-      driver: sqlite3.Database,
+    if (!db) {
+        db = await open({
+            filename: "data.db",
+            driver: sqlite3.Database,
+        });
+    }
+
+    const todos = await db.all("SELECT _id, title, data FROM POEMS where _id = ?", params.poemId);
+
+    return new Response(JSON.stringify(todos), {
+        headers: { "content-type": "application/json" },
+        status: 200,
     });
-  }
-
-  const todos = await db.all("SELECT _id, title, data FROM POEMS where _id = ?", params.poemId);
-
-  return new Response(JSON.stringify(todos), {
-    headers: { "content-type": "application/json" },
-    status: 200,
-  });
 }
