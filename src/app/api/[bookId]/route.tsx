@@ -18,7 +18,7 @@ export async function GET(request:NextRequest,{params}:{params:BookId}) {
   
 // Open a new connection if there is none
   if (!db) {
-    console.log("Connecting to the database...");
+    console.log("1Connecting to the database...");
     db = await open({
      
       filename: 'data.db',
