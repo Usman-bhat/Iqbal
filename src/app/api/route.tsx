@@ -1,6 +1,6 @@
 // route.js
 // Import the necessary modules for SQLite
-import sqlite3 from "sqlite3";
+import {sqlite3} from "sqlite3";
 import { open } from "sqlite";
 
 // Initialize a variable to hold the SQLite database connection
