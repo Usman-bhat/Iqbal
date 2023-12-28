@@ -11,6 +11,10 @@ interface BookID{
 // Handler for GET requests to retrieve all todos
 export async function GET(request:NextRequest,{params}:{params:BookId}) {
 
+
+  if (request.url.length < 0)
+        return new Response("Error"); // Unreachable
+  
 // Open a new connection if there is none
   if (!db) {
     console.log("Connecting to the database...");
