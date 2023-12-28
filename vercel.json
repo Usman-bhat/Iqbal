@@ -1,5 +1,5 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
   "functions": {
     "api/**/*.tsx": {
       "memory": 3008
