@@ -22,7 +22,7 @@ export function Getpoem({ bookId,poemId }) {
     const fetchData = async () => {
       try {
 	console.log(bookId);
-        const response = await fetch(`http://127.0.0.1:3000/api/${bookId}/${poemId}`);
+        const response = await fetch(`https://alamaiqbal.vercel.app/api/${bookId}/${poemId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
