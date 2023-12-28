@@ -20,7 +20,7 @@ export async function GET(request:NextRequest,{params}:{params:BookId}) {
     console.log("Connecting to the database...");
     db = await open({
      
-      filename: "data.db",
+      filename: 'data.db',
       driver: sqlite3.Database,
     });
     console.log("Connected to the database...");
