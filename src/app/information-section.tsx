@@ -20,7 +20,7 @@ export function InformationSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://alamaiqbal.vercel.app/api");
+        const response = await fetch("https://alamaiqbal.vercel.app/api/allBooks");
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
