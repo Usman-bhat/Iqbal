@@ -11,7 +11,7 @@ interface PoemID {
 export async function GET(request: NextRequest, { params }: { params: PoemID }) {
   if (!db) {
     db = await open({
-      filename: "path.resolve(__dirname, 'data.db')",
+      filename: path.resolve(__dirname, 'data.db'),
       driver: sqlite3.Database,
     });
   }
