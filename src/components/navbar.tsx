@@ -55,7 +55,7 @@ export function Navbar() {
       <div className="container mx-auto flex items-center justify-between">
         <Typography
           as="a"
-          href="https://www.material-tailwind.com"
+          href="/"
           target="_blank"
           color={`${darkTheme ? 'white':'blue-gray'}`}
           className="text-lg font-bold"
