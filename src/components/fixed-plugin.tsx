@@ -4,7 +4,7 @@ import { Button } from "@material-tailwind/react";
 
 export function FixedPlugin() {
   return (
-    <a href="/">
+    <a href="https://youtube.com/@QuranicHub">
       <Button
         color="white"
         size="sm"
@@ -15,9 +15,9 @@ export function FixedPlugin() {
           height={128}
           className="w-5 h-5"
           alt="Material Tailwind"
-          src="https://www.material-tailwind.com/favicon.png"
+          src="/favicon.png"
         />{" "}
-        More
+        QuranicHub
       </Button>
     </a>
   );
