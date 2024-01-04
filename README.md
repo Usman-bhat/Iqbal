@@ -18,9 +18,8 @@ Welcome to the Iqbal Poems App, a digital sanctuary dedicated to the timeless po
 
 ## How to Use
 
-1. **Download:** Download the Iqbal Poems App from your app store.
-2. **Explore:** Explore the curated collection of poems categorized by themes.
-3. **Language Options:** Choose between Urdu and Farsi Persian to read Iqbal's verses.
-4. **Dive In:** Immerse yourself in the cultural richness and philosophical essence of each poem.
+
+1. **Explore:** Explore the curated collection of poems categorized by themes.
+2. **Language Options:** Choose between Urdu and Farsi Persian to read Iqbal's verses
 
 Feel the resonance of Iqbal's words and embark on a poetic journey through the Iqbal Poems App. Download now and experience the brilliance of one of the greatest poets of the Indo-Pak region.
