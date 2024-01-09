@@ -10,14 +10,14 @@
   "short_name": "alamaiqbal",
   "start_url": "/",
   "theme_color": "#ffffff",
+  "categories":["books","iqbal","education"],
   "screenshots" : [
   {
     "src": "image/home1.png",
     "type": "image/png",
     "platform": "wide",
   }
-  ]
-  
+  ],
   "icons": [
     {
       "src": "/favicon.png",
