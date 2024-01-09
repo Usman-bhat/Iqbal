@@ -93,6 +93,7 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         />
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={jameel.className}>
         <Layout>
