@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.iqbal.quranichub",
+        "sha256_cert_fingerprints": ["E4:F1:FE:50:40:AD:29:C5:4A:18:D8:7D:D0:99:A7:42:02:EE:38:F7:D7:43:22:45:91:C8:2E:C7:B4:36:D4:20"]
+      }
+    }]
