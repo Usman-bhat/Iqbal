@@ -19,6 +19,7 @@ const PrivacyPolicy = () => {
         to addressing and resolving any concerns promptly.
       </p>
       <p className="font-semibold">Yours sincerely,QuranicHub Team</p>
+      <p className="font-semibold">Email: quranichubofficial@gmail.com</p>
     </div>
   );
 };
