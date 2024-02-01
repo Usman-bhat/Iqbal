@@ -9,7 +9,7 @@ import {
 import { XMarkIcon, Bars3Icon, MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { useTheme } from '@/app/ThemeProvider';  // Adjust the path accordingly
 
-const NAV_MENU = ["Home", "About", "Contact",privacyPolicy];
+const NAV_MENU = ["Home", "About", "Contact","privacyPolicy"];
 
 function NavItem({ children }: { children: React.ReactNode }) {
 const { darkTheme } = useTheme();
