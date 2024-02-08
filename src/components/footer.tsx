@@ -12,9 +12,12 @@ export function Footer() {
       <div className="container mx-auto">
         <div className="mt-16 flex flex-wrap items-center justify-center gap-y-4 border-t border-gray-200 py-6 md:justify-between">
           <Typography className={`text-center font-normal ${darkTheme ? 'text-gray-400' : 'text-gray-700'}`}>
-            &copy; {CURRENT_YEAR} Made with {"♥️"} 
+            &copy; {CURRENT_YEAR} Made with {"♥️"} By
             <a href="https://usman-bhat.github.io/home" target="_blank" className={darkTheme ? 'text-blue-400' : 'text-blue-700'}>
-             By  Mohammad Usman
+             Mohammad Usman
+            </a>&
+            <a href="https://github.com/HASHIM-HAMEEM" target="_blank" className={darkTheme ? 'text-blue-400' : 'text-blue-700'}>
+               Hashim Hameem
             </a>
           </Typography>
           <ul className="flex gap-8 items-center">
