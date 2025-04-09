@@ -2,85 +2,98 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Alert } from "@material-tailwind/react";
 import { AcademicCapIcon } from "@heroicons/react/24/solid";
-import { ListCard } from "@/components/list-card"; // Adjust the import path as needed
-import { useTheme } from '@/app/ThemeProvider';  // Adjust the path accordingly                           
+import { ListCard } from "@/components/list-card";
+import { useTheme } from '@/app/ThemeProvider';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { db } from "@/app/firebase";
-import { collection, getDocs, query, limit, where, orderBy } from "firebase/firestore";
+import poemListData from '@/data/poem_list.json';
 
-interface Item {
+interface PoemItem {
+  _id: number;
   title: string;
-  _id: string;
-  // Add other fields as needed
+  book_id: number;
+  //data: string;
 }
 
-async function fetchFirebase(bookid) {
-  console.log(bookid);
-  const qrysnap = await getDocs(query(collection(db, "poems"), orderBy("_id"), where("book_id", "==", parseInt(bookid))));
-
-  const data = [];
-  qrysnap.forEach((doc) => {
-    data.push({ id: doc.id, ...doc.data() });
-  });
-  return data;
-}
-
-export function Getlist({ bookId }) {
-  const { darkTheme } = useTheme();
-  const [items, setItems] = useState([]);
+export function Getlist({ bookId }: { bookId: string }) {
+  const { theme } = useTheme();
+  const [items, setItems] = useState<PoemItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchFirebase1 = async () => {
+    const loadPoems = () => {
       try {
-        const data = await fetchFirebase(bookId);
-        setItems(data);
+        // Filter poems by book_id and sort by _id
+        const filteredPoems = poemListData
+          .filter(poem => poem.book_id === parseInt(bookId))
+          .sort((a, b) => a._id - b._id);
+        setItems(filteredPoems);
       } catch (error) {
-        setError();
+        setError(error instanceof Error ? error : new Error('Failed to load poems'));
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFirebase1();
-  }, []);
+    // Add a small delay to simulate loading for better UX
+    setTimeout(loadPoems, 500);
+  }, [bookId]);
 
   if (loading) {
-    return (<Skeleton height={30} count={5} />);
+    return (
+      <div className="container-custom py-20">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <div key={n} className="card bg-[rgb(var(--color-secondary))] p-6">
+              <Skeleton height={200} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return (<Alert className="m-4 p-2">Oops!!! something went wrong. Please refresh</Alert>);
+    return (
+      <div className="container-custom py-8">
+        <Alert className="bg-red-50 text-red-800">
+          {error.message || "Something went wrong. Please refresh"}
+        </Alert>
+      </div>
+    );
   }
 
-  const collection = items.length > 0 ? (
-    items.map((item, idx) => (
-      <ListCard
-        key={item._id}
-        bname={item.title}
-        id={item._id}
-        bookId={bookId}
-      />
-    ))
-  ) : (
-    <Alert className="m-4 p-2">No Data Found</Alert>
-  );
-
   return (
-    <>
-      <section className={`pb-28 px-8 ${darkTheme ? 'bg-gray-800' : 'bg-gray-100'}`}>
-        <div className="m-4 text-center">
-          <Typography placeholder="poem" className={`mb-2 text-center mt-3 text-3xl font-bold ${darkTheme ? 'text-gray-100' : 'blue-gray'}`}>
+    <section className="bg-[rgb(var(--color-primary))] py-20">
+      <div className="container-custom">
+        <div className="mb-12 text-center">
+          <Typography 
+            placeholder="poem" 
+            className="text-3xl font-bold text-[rgb(var(--color-text))]"
+          >
             Poems
           </Typography>
         </div>
-        <div className="flex flex-col flex-row h-full grid gap-4 sm:grid-col-2 md:grid-cols-2 lg:grid-cols-3">
-          {collection}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {items.length > 0 ? (
+            items.map((item) => (
+              <ListCard
+                key={item._id}
+                bname={item.title}
+                id={item._id.toString()}
+                bookId={bookId}
+                theme={theme}
+              />
+            ))
+          ) : (
+            <Alert className="col-span-full bg-[rgb(var(--color-secondary))] text-[rgb(var(--color-text))]">
+              Nothing found
+            </Alert>
+          )}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 

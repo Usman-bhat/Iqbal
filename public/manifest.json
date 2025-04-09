@@ -1,21 +1,27 @@
 {
   "id": "1",
-  "description": "all Iqbal's poems in one place",
-  "name": "alamaiqbal",
-  "short_name": "alamaiqbal",
+  "description": "Explore Allama Iqbal's poetic legacy in Urdu and Persian",
+  "name": "Iqbal's Poetry Collection",
+  "short_name": "Iqbal",
   "icons": [
     {
-      "src": "/favicon.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     },
     {
-      "src": "/favicon1.png",
-      "type": "image/x-icon"
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "theme_color": "#FFFFFF",
-  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait"
