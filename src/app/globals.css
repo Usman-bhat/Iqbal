@@ -2,3 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font declarations */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  src: url('/fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'jameelFont';
+  src: url('/fonts/Jameel-Noori-Nastaleeq.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root[data-theme="light"] {
+    --color-primary: 248 250 252;
+    --color-secondary: 226 232 240;
+    --color-text: 30 41 59;
+    --color-accent: 59 130 246;
+  }
+
+  :root[data-theme="dark"] {
+    --color-primary: 30 41 59;
+    --color-secondary: 51 65 85;
+    --color-text: 248 250 252;
+    --color-accent: 96 165 250;
+  }
+
+  :root[data-theme="sepia"] {
+    --color-primary: 244 236 216;
+    --color-secondary: 231 213 181;
+    --color-text: 74 52 32;
+    --color-accent: 139 69 19;
+  }
+}
+
+:root {
+  --color-primary: 255, 255, 255;
+  --color-secondary: 241, 245, 249;
+  --color-text: 30, 41, 59;
+  --color-accent: 37, 99, 235;
+}
+
+/* Dark theme */
+.dark {
+  --color-primary: 15, 23, 42;
+  --color-secondary: 30, 41, 59;
+  --color-text: 226, 232, 240;
+  --color-accent: 59, 130, 246;
+}
+
+/* Sepia theme */
+.sepia {
+  --color-primary: 253, 246, 236; /* Lighter, warmer background */
+  --color-secondary: 245, 235, 220; /* Softer secondary color */
+  --color-text: 77, 51, 30; /* Deeper brown for better readability */
+  --color-accent: 160, 82, 45; /* Muted, earthy accent color */
+}
+
+/* Light theme */
+.light {
+  --color-primary: 255, 255, 255;
+  --color-secondary: 241, 245, 249;
+  --color-text: 30, 41, 59;
+  --color-accent: 37, 99, 235;
+}
+
+/* Add smooth transitions for theme changes */
+* {
+  transition: background-color 0.2s ease-in-out, 
+              color 0.2s ease-in-out;
+}
+
+/* Fix background color issue */
+body {
+  min-height: 100vh;
+  background-color: rgb(var(--color-primary));
+}
+
+/* Ensure proper font loading */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  src: url('/fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer components {
+  .container-custom {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+.bg-sepia {
+  background-color: #f4ecd8;
+}
+
+.text-sepia {
+  color: #704214;
+}
+
+/* Urdu text styling */
+.urdu-text {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
+}
+
+/* Poetry text styling */
+.poetry-text {
+  font-family: 'jameelFont', 'Noto Nastaliq Urdu', serif;
+  line-height: 2.5;
+  text-align: center;
+  direction: rtl;
+}
+

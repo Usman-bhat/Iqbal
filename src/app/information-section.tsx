@@ -1,31 +1,40 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Typography,Alert } from "@material-tailwind/react";
-import { AcademicCapIcon } from "@heroicons/react/24/solid";
-import InfoCard from "@/components/info-card"; // Adjust the import path as needed
-import { useTheme } from './ThemeProvider';  // Adjust the path accordingly
-import './custom.css';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
-  
+import { motion } from 'framer-motion';
+import { BookOpenIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import InfoCard from "@/components/info-card";
+import { useTheme } from './ThemeProvider';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import booksData from '@/data/books.json';
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 export function InformationSection() {
-  const { darkTheme } = useTheme();
-
+  const { theme } = useTheme();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const loadBooks = () => {
       try {
-        const response = await fetch("https://alamaiqbal.vercel.app/api/allBooks");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setItems(data);
+        // Sort books by order_by field
+        const sortedBooks = [...booksData].sort((a, b) => a.order_by - b.order_by);
+        setItems(sortedBooks);
       } catch (error) {
         setError(error);
       } finally {
@@ -33,44 +42,77 @@ export function InformationSection() {
       }
     };
 
-    fetchData();
+    // Add a small delay to simulate loading for better UX
+    setTimeout(loadBooks, 500);
   }, []);
 
   if (loading) {
-    return (<Skeleton count={3} height={30} />)
+    return (
+      <div className="container-custom py-20">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((n) => (
+            <div key={n} className="card bg-[rgb(var(--color-secondary))] p-6">
+              <Skeleton height={200} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return (<Alert className="m-4">Oops!!! somthing went wrong.Please refresh </Alert>)
+    return (
+      <div className="container-custom py-20">
+        <div className="rounded-lg bg-red-50 p-6 text-center">
+          <ExclamationCircleIcon className="mx-auto h-12 w-12 text-red-400" />
+          <h3 className="mt-4 text-lg font-semibold text-red-800">
+            Oops! Something went wrong
+          </h3>
+          <p className="mt-2 text-red-600">
+            Please refresh the page to try again
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  const collection = items.map((item, idx) => (
-      <InfoCard
-        icon={AcademicCapIcon}
-        bname={item.name}
-        id={item._id}
-	language={item.language}
-      >
-      </InfoCard>
-  ));
-
   return (
-    <>
-      <section className={`pb-28 px-8 ${darkTheme ? 'bg-gray-800' : 'bg-gray-200'}`}>
-   	
-	<div className={`p-2 rounded-lg ${darkTheme ? 'bg-gray-600' : 'bg-gray-300'}`}>
-            <div className="mb-10 text-center">
-              <Typography color={darkTheme ? 'white' : 'blue-gray'} className=" mt-4 text-center text-3xl font-bold">
-                Books
-              </Typography>
-            </div>
-         <div className="bg-transparent grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-          {collection}
-        </div>
-          
-      </div>  
-      </section>
-    </>
+    <section className="bg-[rgb(var(--color-primary))] py-20">
+      <div className="container-custom">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16 text-center"
+        >
+          <BookOpenIcon className="mx-auto h-12 w-12 text-[rgb(var(--color-accent))]" />
+          <h2 className="mt-4 text-3xl font-bold text-[rgb(var(--color-text))]">
+            Literary Collection
+          </h2>
+          <p className="mt-2 text-[rgb(var(--color-text))] opacity-80">
+            Explore the timeless works of Allama Iqbal
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          {items.map((item, idx) => (
+            <motion.div key={item._id} variants={item}>
+              <InfoCard
+                icon={BookOpenIcon}
+                bname={item.name}
+                id={item._id}
+                language={item.language}
+                theme={theme}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   );
 }
 

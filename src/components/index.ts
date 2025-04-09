@@ -1,7 +1,7 @@
 "use client";
 import fs from 'fs';
-export * from "./navbar";
-export * from "./footer";
+export * from "./Navbar";
+export * from "./Footer";
 export * from "./layout";
 export * from "./info-card";
 export * from "./fixed-plugin";

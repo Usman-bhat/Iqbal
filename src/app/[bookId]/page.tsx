@@ -7,14 +7,21 @@ export default function Book({ params }) {
     { href: "/", label: "" },
     { href: "/", label: "Books" },
   ];
+  
   return (
     <ThemeProvider>
-      <Navbar />
-      <MyBreadCrumb breadcrumbs={breadcrumbsData} />
-	<div className="flex flex-col h-full">
-        <Getlist bookId={params.bookId} />
-      </div>      
-	<Footer />
+      <div className="min-h-screen bg-[rgb(var(--color-primary))]">
+        <Navbar />
+        <main className="pt-16">
+          <div className="container-custom py-4">
+            <MyBreadCrumb breadcrumbs={breadcrumbsData} />
+          </div>
+          <div className="flex flex-col h-full">
+            <Getlist bookId={params.bookId} />
+          </div>
+        </main>
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 }

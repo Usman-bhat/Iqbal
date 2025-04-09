@@ -1,10 +1,6 @@
-"use client"                                                                   
-
-
-
-// InfoCard.jsx
-import React from 'react';
-import { Breadcrumbs } from "@material-tailwind/react";
+"use client"
+import { HomeIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 import { useTheme } from '@/app/ThemeProvider';
 
 interface BreadCrumbProps {
@@ -12,27 +8,35 @@ interface BreadCrumbProps {
 }
 
 export function MyBreadCrumb({ breadcrumbs }: BreadCrumbProps) {
-  const { darkTheme } = useTheme();
+  const { theme } = useTheme();
 
   return (
-    <div className={`${darkTheme ? 'bg-gray-800' : 'bg-gray-200'} w-full px-2`}>
-      <Breadcrumbs className="bg-gray-500">
-        {breadcrumbs.map((breadcrumb, index) => (
-          <a key={index} href={breadcrumb.href} className="flex items-center opacity-90">
-            {index === 0 && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-4 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-              </svg>
-            )}
-            <span className="px-1">{breadcrumb.label}</span>
+    <nav className="bg-[rgb(var(--color-primary))] py-4">
+      <div className="container-custom">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center space-x-2 text-sm"
+        >
+          <a 
+            href="/" 
+            className="flex items-center text-[rgb(var(--color-accent))] hover:opacity-80 transition-opacity"
+          >
+            <HomeIcon className="h-4 w-4" />
           </a>
-        ))}
-      </Breadcrumbs>
-    </div>
+          {breadcrumbs.map((breadcrumb, index) => (
+            <div key={index} className="flex items-center">
+              <ChevronRightIcon className="h-4 w-4 text-[rgb(var(--color-text))] opacity-40" />
+              <a
+                href={breadcrumb.href}
+                className="ml-2 text-[rgb(var(--color-text))] hover:text-[rgb(var(--color-accent))] transition-colors"
+              >
+                {breadcrumb.label}
+              </a>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </nav>
   );
-} 
+}

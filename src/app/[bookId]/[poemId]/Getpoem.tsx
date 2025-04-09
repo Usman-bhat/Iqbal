@@ -1,15 +1,16 @@
 "use client";
 
-
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardBody,CardFooter,Button,Alert} from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { useTheme } from "@/app/ThemeProvider"; // Adjust the path accordingly
+import { useTheme } from "@/app/ThemeProvider";
+import { motion } from "framer-motion";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { db } from "@/app/firebase";
-import { collection, getDocs, query,where } from "firebase/firestore";
-
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { FontSizeControl } from "@/components/font-size-control";
+import { Cache } from '@/utils/cache';
+import { WordDefinitionSheet } from '@/components/word-definition-sheet';
 
 async function fetchFirebase(poemid) {
   const qrysnap = await getDocs(query(collection(db, "poems"), where("_id", "==", parseInt(poemid))));
@@ -21,18 +22,41 @@ async function fetchFirebase(poemid) {
 }
 
 export function Getpoem({ bookId, poemId }) {
-  const { darkTheme } = useTheme();
+  const { theme } = useTheme();
   const next = parseInt(poemId) + 1;
   const prev = parseInt(poemId) > 1 ? parseInt(poemId) - 1 : 1;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [fontSize, setFontSize] = useState(24); // Default font size
+  const [selectedText, setSelectedText] = useState<{ text: string; type: 'word' | 'line' } | null>(null);
+  const cache = Cache.getInstance();
+
+  const increaseFontSize = () => {
+    setFontSize(prev => Math.min(prev + 2, 40)); // Max size 40px
+  };
+
+  const decreaseFontSize = () => {
+    setFontSize(prev => Math.max(prev - 2, 16)); // Min size 16px
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Check cache first
+        const cachedData = cache.get(`poem-${poemId}`);
+        if (cachedData) {
+          setItem(cachedData);
+          setLoading(false);
+          return;
+        }
+
         const data = await fetchFirebase(poemId);
+        // Store in cache
+        cache.set(`poem-${poemId}`, data);
         setItem(data);
+      } catch (error) {
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -41,39 +65,149 @@ export function Getpoem({ bookId, poemId }) {
     fetchData();
   }, [poemId]);
 
+  const handleWordClick = (word: string) => {
+    setSelectedText({ text: word, type: 'word' });
+  };
+
+  const handleLineClick = (line: string) => {
+    setSelectedText({ text: line, type: 'line' });
+  };
+
+  const renderPoemText = (text: string) => {
+    return text.split('\n').map((line, lineIndex) => (
+      <motion.div 
+        key={`line-${lineIndex}`}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: lineIndex * 0.1 }}
+        className="mb-8 text-right flex flex-wrap justify-center gap-4" 
+        dir="rtl"
+        onClick={() => handleLineClick(line)}
+      >
+        {line.split(/\s+/).map((word, wordIndex) => (
+          <motion.span
+            key={`word-${wordIndex}`}
+            whileHover={{ scale: 1.05 }}
+            className={`
+              inline-block cursor-pointer px-2
+              hover:text-[rgb(var(--color-accent))]
+              transition-colors duration-200
+              hover:bg-[rgb(var(--color-secondary))]
+              rounded-md
+            `}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleWordClick(word);
+            }}
+            style={{
+              fontFamily: 'Noto Nastaliq Urdu, serif',
+              fontSize: `${fontSize}px`,
+              lineHeight: '2',
+              textAlign: 'center',
+              fontWeight: '400',
+              letterSpacing: '0.02em'
+            }}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.div>
+    ));
+  };
+
   if (loading) {
-    return <Skeleton height={70} count={5} />;
+    return (
+      <div className="container-custom py-12">
+        <Skeleton 
+          height={400} 
+          className="bg-[rgb(var(--color-secondary))]"
+        />
+      </div>
+    );
   }
 
-  if (error) {                                                                                                return <Alert className="m-4">Oops!!! Something went wrong. Please refresh.</Alert>;
-  }
- if (!item || Object.keys(item).length === 0) {
-    return <Alert className="m-4">No data found.</Alert>;
+  if (error || !item || Object.keys(item).length === 0) {
+    return (
+      <div className="container-custom py-12">
+        <div className="rounded-lg bg-red-50 p-6 text-center">
+          <p className="text-red-800">
+            {error ? "Something went wrong. Please refresh." : "No data found."}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <section className={`py-10 px-4 lg:py-18 ${darkTheme ? 'bg-gray-800' : 'bg-gray-200'}`}>                    <Card placeholder="" key={item.id} color="transparent" shadow={false} className="p-2">                      <CardBody placeholder="">                                                                                   <div className={`mb-2 text-center text-lg ${darkTheme ? 'text-gray-100 bg-gray-800' : 'text-gray-800 bg-gray-200'}`}>                                                                                                 {item.title}
-          </div>
-          <div className="border-t border-gray-300 mb-4"></div>
-          <div className={`whitespace-pre direction-rtl text-center ${darkTheme ? 'text-white' : 'text-black'}`}>
-            {item.data}
-          </div>
-        </CardBody>
-      </Card>
+    <>
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-[rgb(var(--color-primary))] py-12"
+      >
+        <div className="container-custom">
+          <div className="max-w-4xl mx-auto">
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-2xl md:text-3xl font-bold text-center mb-8 text-[rgb(var(--color-text))]"
+            >
+              {item.title}
+            </motion.h1>
 
-      <div className={`flex justify-between bg-gray-100 px-4 ${darkTheme ? 'bg-gray-800' : 'bg-gray-200'}`}>
-        <div className={`flex items-center outline m-4 p-4 rounded-md ${darkTheme ? 'bg-gray-600' : 'bg-gray-100'}`}>
-          <a href={`/${bookId}/${prev}`} className="blue-gray hover:underline cursor-pointer">
-            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
-          </a>
+            <FontSizeControl
+              fontSize={fontSize}
+              onIncrease={increaseFontSize}
+              onDecrease={decreaseFontSize}
+            />
+
+            <div className="bg-[rgb(var(--color-secondary))] rounded-2xl p-8 shadow-lg">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-center leading-relaxed text-[rgb(var(--color-text))]"
+                style={{ 
+                  fontSize: `${fontSize}px`,
+                  direction: 'rtr',
+                  fontFamily: 'jameelFont',
+                  fontFeatureSettings: '"calt" 0'
+                }}
+              >
+                {renderPoemText(item.data)}
+              </motion.div>
+            </div>
+
+            <div className="mt-8 flex justify-between items-center">
+              <motion.a
+                href={`/${bookId}/${prev}`}
+                whileHover={{ x: -5 }}
+                className="flex items-center gap-2 p-3 rounded-full bg-[rgb(var(--color-secondary))] text-[rgb(var(--color-text))] hover:bg-[rgb(var(--color-accent))] hover:text-white transition-all"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+                <span className="hidden sm:inline">Previous</span>
+              </motion.a>
+
+              <motion.a
+                href={`/${bookId}/${next}`}
+                whileHover={{ x: 5 }}
+                className="flex items-center gap-2 p-3 rounded-full bg-[rgb(var(--color-secondary))] text-[rgb(var(--color-text))] hover:bg-[rgb(var(--color-accent))] hover:text-white transition-all"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ArrowRightIcon className="h-5 w-5" />
+              </motion.a>
+            </div>
+          </div>
         </div>
-        <div className={`flex items-center outline m-4 p-4 rounded-md bg-gray-100 ${darkTheme ? 'bg-gray-600' : 'bg-gray-100'}`}>
-          <a href={`/${bookId}/${next}`} className="blue-gray hover:underline cursor-pointer">
-            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-    </section>
+      </motion.section>
+
+      <WordDefinitionSheet
+        text={selectedText?.text || ''}
+        type={selectedText?.type || 'word'}
+        isOpen={!!selectedText}
+        onClose={() => setSelectedText(null)}
+      />
+    </>
   );
 }
 
