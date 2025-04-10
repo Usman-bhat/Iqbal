@@ -57,14 +57,6 @@
   --color-accent: 59, 130, 246;
 }
 
-/* Sepia theme */
-.sepia {
-  --color-primary: 253, 246, 236; /* Lighter, warmer background */
-  --color-secondary: 245, 235, 220; /* Softer secondary color */
-  --color-text: 77, 51, 30; /* Deeper brown for better readability */
-  --color-accent: 160, 82, 45; /* Muted, earthy accent color */
-}
-
 /* Light theme */
 .light {
   --color-primary: 255, 255, 255;
@@ -75,8 +67,9 @@
 
 /* Add smooth transitions for theme changes */
 * {
-  transition: background-color 0.2s ease-in-out, 
-              color 0.2s ease-in-out;
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out;
 }
 
 /* Fix background color issue */
@@ -88,7 +81,7 @@ body {
 /* Ensure proper font loading */
 @font-face {
   font-family: 'Noto Nastaliq Urdu';
-  src: url('/fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+  src: url('./jameel1.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -112,7 +105,6 @@ body {
 .urdu-text {
   font-family: 'Noto Nastaliq Urdu', serif;
   line-height: 2;
-  text-align: right;
   direction: rtl;
 }
 

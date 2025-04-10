@@ -20,7 +20,7 @@ export function ListCard({ bname, id, bookId }: ListCardProps) {
       <Link href={`/${bookId}/${id}`}>
         <div className="h-full rounded-xl p-6 bg-[rgb(var(--color-secondary))] transition-all duration-300 hover:shadow-lg">
           <div className="flex flex-col h-full">
-            <h3 className="text-xl font-semibold text-[rgb(var(--color-text))] mb-4">
+            <h3 className="text-xl urdu-text font-semibold text-[rgb(var(--color-text))] mb-4">
               {bname}
             </h3>
             <div className="mt-auto flex items-center justify-end">

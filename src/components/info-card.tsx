@@ -28,12 +28,12 @@ export function InfoCard({ bname, id, language }: InfoCardProps) {
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-[rgb(var(--color-text))] line-clamp-2">
+              <h3 className="text-xl urdu-text font-semibold text-[rgb(var(--color-text))] line-clamp-2">
                 {bname}
               </h3>
               
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[rgb(var(--color-accent))] bg-opacity-10 text-white">
+                <span className="inline-flex urdu-text items-center px-3 py-1 rounded-full text-sm font-medium bg-[rgb(var(--color-accent))] bg-opacity-10 text-white">
                   {language}
                 </span>
                 

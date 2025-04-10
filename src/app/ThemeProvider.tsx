@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const themes = ['light', 'dark', 'sepia'] as const;
+const themes = ['light', 'dark'] as const;
 type Theme = typeof themes[number];
 
 interface ThemeContextType {

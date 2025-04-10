@@ -73,6 +73,47 @@ export function Getpoem({ bookId, poemId }) {
     setSelectedText({ text: line, type: 'line' });
   };
 
+  // Add theme-specific styles
+  const getThemeStyles = () => {
+    switch (theme) {
+      case 'dark':
+        return {
+          poetry: {
+            fontFamily: 'jameelFont, Noto Nastaliq Urdu, serif',
+            fontSize: `${fontSize}px`,
+            lineHeight: '2.5',
+            letterSpacing: '0.03em',
+            fontWeight: '500',
+            color: 'rgb(var(--color-text))',
+            textShadow: '0 1px 1px rgba(0, 0, 0, 0.1)'
+          },
+          container: {
+            background: 'rgb(var(--color-secondary))',
+            boxShadow: '0 4px 6px -1px rgba(255, 255, 255, 0.1)',
+            borderRadius: '1rem',
+            padding: '2rem'
+          }
+        };
+      default:
+        return {
+          poetry: {
+            fontFamily: 'jameelFont, Noto Nastaliq Urdu, serif',
+            fontSize: `${fontSize}px`,
+            lineHeight: '2',
+            letterSpacing: '0.02em',
+            fontWeight: '400'
+          },
+          container: {
+            background: 'rgb(var(--color-secondary))',
+            borderRadius: '1rem',
+            padding: '2rem'
+          }
+        };
+    }
+  };
+
+  const themeStyles = getThemeStyles();
+
   const renderPoemText = (text: string) => {
     return text.split('\n').map((line, lineIndex) => (
       <motion.div 
@@ -80,7 +121,7 @@ export function Getpoem({ bookId, poemId }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: lineIndex * 0.1 }}
-        className="mb-8 text-right flex flex-wrap justify-center gap-4" 
+        className="mb-8 text-right urdu-text flex flex-wrap justify-center gap-4" 
         dir="rtl"
         onClick={() => handleLineClick(line)}
       >
@@ -91,7 +132,7 @@ export function Getpoem({ bookId, poemId }) {
             className={`
               inline-block cursor-pointer px-2
               hover:text-[rgb(var(--color-accent))]
-              transition-colors duration-200
+              transition-all duration-300
               hover:bg-[rgb(var(--color-secondary))]
               rounded-md
             `}
@@ -99,14 +140,7 @@ export function Getpoem({ bookId, poemId }) {
               e.stopPropagation();
               handleWordClick(word);
             }}
-            style={{
-              fontFamily: 'Noto Nastaliq Urdu, serif',
-              fontSize: `${fontSize}px`,
-              lineHeight: '2',
-              textAlign: 'center',
-              fontWeight: '400',
-              letterSpacing: '0.02em'
-            }}
+            style={themeStyles.poetry}
           >
             {word}
           </motion.span>
@@ -150,7 +184,7 @@ export function Getpoem({ bookId, poemId }) {
             <motion.h1
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-2xl md:text-3xl font-bold text-center mb-8 text-[rgb(var(--color-text))]"
+              className="text-2xl urdu-text md:text-3xl font-bold text-center mb-8 text-[rgb(var(--color-text))]"
             >
               {item.title}
             </motion.h1>
@@ -161,18 +195,12 @@ export function Getpoem({ bookId, poemId }) {
               onDecrease={decreaseFontSize}
             />
 
-            <div className="bg-[rgb(var(--color-secondary))] rounded-2xl p-8 shadow-lg">
+            <div style={themeStyles.container}>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-center leading-relaxed text-[rgb(var(--color-text))]"
-                style={{ 
-                  fontSize: `${fontSize}px`,
-                  direction: 'rtr',
-                  fontFamily: 'jameelFont',
-                  fontFeatureSettings: '"calt" 0'
-                }}
+                className="text-center text-[rgb(var(--color-text))]"
               >
                 {renderPoemText(item.data)}
               </motion.div>
