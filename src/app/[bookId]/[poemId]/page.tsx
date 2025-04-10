@@ -1,37 +1,29 @@
-import { ThemeProvider } from "@/app/ThemeProvider";
 import { Navbar, Footer, MyBreadCrumb } from "@/components";
 import { Getpoem } from './Getpoem';
 import { Metadata } from 'next';
-import getPoem from './Getpoem'; // Adjust the path if needed
-
-// Import necessary Firebase modules
 import { db } from "@/app/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 // Define the getPoemDetails function
 async function getPoemDetails(bookId: string, poemId: string) {
   try {
-    // Query the 'poems' collection
     const qrysnap = await getDocs(
       query(
         collection(db, "poems"),
         where("_id", "==", parseInt(poemId)),
-        where("book_id", "==", parseInt(bookId)) // Add bookId filter
+        where("book_id", "==", parseInt(bookId))
       )
     );
 
-    // Check if any documents were found
     if (qrysnap.empty) {
-      console.log("No matching documents.");
-      return null; // Or throw an error if you prefer
+      return null;
     }
 
-    // Extract the data from the first document
     const doc = qrysnap.docs[0].data();
     return { id: qrysnap.docs[0].id, ...doc };
   } catch (error) {
     console.error("Error getting poem details:", error);
-    return null; // Or throw an error if you prefer
+    return null;
   }
 }
 
@@ -44,9 +36,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { bookId, poemId } = params;
-
-  // Get poem details from your data source
-  const poem = await getPoem({bookId,poemId}); // Implement this function
+  const poem = await getPoemDetails(bookId, poemId);
 
   if (!poem) {
     return {
@@ -56,11 +46,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: poem?.title || 'Poem',
-    description: `Read ${poem?.title} from Allama Iqbal's collection`,
+    title: poem.title || 'Poem',
+    description: `Read ${poem.title} from Allama Iqbal's collection`,
     openGraph: {
-      title: poem?.title,
-      description: `Explore ${poem?.title} from Allama Iqbal's works`,
+      title: poem.title,
+      description: `Explore ${poem.title} from Allama Iqbal's works`,
       type: 'article',
     },
     alternates: {
@@ -69,20 +59,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function Book({ params }) {
+export default function PoemPage({ params }: Props) {
   const breadcrumbsData = [
     { href: "/", label: "Books" },
-    { href: `/${params.bookId}`, label: "Poems" }
+    { href: `/${params.bookId}`, label: "Poems" },
+    { href: `/${params.bookId}/${params.poemId}`, label: "Reading" }
   ];
 
   return (
-    <ThemeProvider>
+    <>
       <Navbar />
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col min-h-screen pt-16">
         <MyBreadCrumb breadcrumbs={breadcrumbsData} />
-        <Getpoem poemId={params.poemId} bookId={params.bookId} />
+        <main className="flex-grow">
+          <Getpoem bookId={params.bookId} poemId={params.poemId} />
+        </main>
       </div>
       <Footer />
-    </ThemeProvider>
+    </>
   );
 }
